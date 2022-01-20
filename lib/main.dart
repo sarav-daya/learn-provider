@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider_tutorials/models/babies.dart';
 
 import 'models/dog.dart';
 
@@ -24,15 +25,28 @@ void main() {
 // ? This will listen for changes only when the god name changes.
 // ! context.select<Dog, String>((Dog dog) => dog.name)
 
+// ! MultiProvider is used to provide more than one proivders.
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Dog>(
-      create: (context) => Dog(name: 'dog05', breed: 'breed05', age: 3),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Dog>(
+          create: (context) => Dog(name: 'dog06', breed: 'breed06', age: 3),
+        ),
+        FutureProvider<int>(
+            create: (context) {
+              final dogAge = context.read<Dog>().age;
+              final baby = Baby(age: dogAge);
+              return baby.getBabies();
+            },
+            initialData: 0)
+      ],
       child: MaterialApp(
-        title: 'Provider 05',
+        title: 'Provider 06',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -55,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Provider 05'),
+        title: const Text('Provider 06'),
       ),
       body: Center(
         child: Column(
@@ -106,6 +120,11 @@ class Age extends StatelessWidget {
           //'- age: ${Provider.of<Dog>(context).age}',
           '- age: ${context.select<Dog, int>((dog) => dog.age)}',
           style: const TextStyle(fontSize: 20.0),
+        ),
+        const SizedBox(height: 10.0),
+        Text(
+          '- number of babies : ${context.watch<int>()}',
+          style: TextStyle(fontSize: 20),
         ),
         const SizedBox(height: 20.0),
         ElevatedButton(
