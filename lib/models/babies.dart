@@ -15,4 +15,11 @@ class Baby {
       return 2;
     }
   }
+
+  Stream<String> cry() async* {
+    for (int i = 1; i < age; i++) {
+      await Future.delayed(Duration(seconds: 2));
+      yield 'Cry $i times';
+    }
+  }
 }
