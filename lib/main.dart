@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:provider_tutorials/models/counter.dart';
+import 'package:provider_tutorials/show_me_counter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,56 +13,62 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Provider 11',
+      title: 'Anonymous Route',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: ChangeNotifierProvider<Counter>(
+        create: (context) => Counter(),
+        child: const MyHomePage(),
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatelessWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Provider 11'),
+        title: Text('Anonymous Route'),
       ),
       body: Center(
-        child: ChangeNotifierProvider<Counter>(
-          create: (context) => Counter(),
-          child: Builder(
-            builder: (context) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'counter ${context.watch<Counter>().counter}',
-                    style: TextStyle(fontSize: 20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: Text(
+                'Show Me Counter',
+                style: TextStyle(fontSize: 20.0),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return ChangeNotifierProvider.value(
+                        value: context.read<Counter>(),
+                        child: ShowMeCounter(),
+                      );
+                    },
                   ),
-                  SizedBox(
-                    height: 30.0,
-                  ),
-                  ElevatedButton(
-                    onPressed: context.read<Counter>().increment,
-                    child: Text(
-                      'Increment',
-                      style: TextStyle(fontSize: 20.0),
-                    ),
-                  )
-                ],
-              );
-            },
-          ),
+                );
+              },
+            ),
+            SizedBox(
+              height: 20.0,
+            ),
+            ElevatedButton(
+              onPressed: context.read<Counter>().increment,
+              child: Text(
+                'Increment Counter',
+                style: TextStyle(fontSize: 20.0),
+              ),
+            )
+          ],
         ),
       ),
     );
