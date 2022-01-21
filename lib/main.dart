@@ -41,22 +41,30 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text('Provider 08'),
       ),
       body: Consumer<Dog>(
-          builder: (BuildContext context, Dog dog, Widget? child) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                '- name: ${dog.name}',
-                style: TextStyle(fontSize: 20.0),
-              ),
-              SizedBox(height: 10.0),
-              BreedAndAge(),
-            ],
-          ),
-        );
-      }),
+        builder: (BuildContext context, Dog dog, Widget? child) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                child!,
+                SizedBox(height: 10.0),
+                Text(
+                  '- name: ${dog.name}',
+                  style: TextStyle(fontSize: 20.0),
+                ),
+                SizedBox(height: 10.0),
+                BreedAndAge(),
+              ],
+            ),
+          );
+        },
+        // ! This text widget will not be rebuilt whenever the dog object changes
+        child: Text(
+          'I like dogs very much',
+          style: TextStyle(fontSize: 20.0),
+        ),
+      ),
     );
   }
 }
