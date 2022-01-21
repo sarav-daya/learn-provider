@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'models/dog.dart';
-
 void main() {
   runApp(const MyApp());
 }
@@ -12,111 +10,64 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Dog>(
-      create: (context) => Dog(name: 'dog08', breed: 'breed08', age: 3),
-      child: MaterialApp(
-        title: 'Provider 08',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const MyHomePage(),
+    return MaterialApp(
+      title: 'Provider 09',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: const HomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class Foo with ChangeNotifier {
+  String value = 'Foo';
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  void changeValue() {
+    value = value == 'Foo' ? 'Bar' : 'Foo';
+    notifyListeners();
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class HomePage extends StatelessWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Provider 08'),
+        title: Text('Provider 09'),
       ),
-      body: Consumer<Dog>(
-        builder: (BuildContext context, Dog dog, Widget? child) {
+      body: ChangeNotifierProvider<Foo>(
+        create: (context) => Foo(),
+        child: Consumer<Foo>(
+            builder: (BuildContext context, Foo foo, Widget? child) {
           return Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
               children: [
-                child!,
-                SizedBox(height: 10.0),
                 Text(
-                  '- name: ${dog.name}',
-                  style: TextStyle(fontSize: 20.0),
+                  '${foo.value}',
+                  style: TextStyle(
+                    fontSize: 40,
+                  ),
                 ),
-                SizedBox(height: 10.0),
-                BreedAndAge(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                ElevatedButton(
+                  onPressed: foo.changeValue,
+                  child: Text(
+                    'Change Value',
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                )
               ],
             ),
           );
-        },
-        // ! This text widget will not be rebuilt whenever the dog object changes
-        child: Text(
-          'I like dogs very much',
-          style: TextStyle(fontSize: 20.0),
-        ),
+        }),
       ),
-    );
-  }
-}
-
-class BreedAndAge extends StatelessWidget {
-  const BreedAndAge({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<Dog>(builder: (_, Dog dog, __) {
-      return Column(
-        children: [
-          Text(
-            '- breed: ${dog.breed}',
-            style: TextStyle(fontSize: 20.0),
-          ),
-          SizedBox(height: 10.0),
-          Age(),
-        ],
-      );
-    });
-  }
-}
-
-class Age extends StatelessWidget {
-  const Age({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer<Dog>(
-      builder: (_, Dog dog, __) {
-        return Column(
-          children: [
-            Text(
-              '- age: ${dog.age}',
-              style: TextStyle(fontSize: 20.0),
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () => dog.grow(),
-              child: Text(
-                'Grow',
-                style: TextStyle(fontSize: 20.0),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }
