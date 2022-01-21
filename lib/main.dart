@@ -4,25 +4,44 @@ import 'package:provider_tutorials/models/counter.dart';
 import 'package:provider_tutorials/show_me_counter.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class MyApp extends StatefulWidget {
+  MyApp({Key? key}) : super(key: key);
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _counter = Counter();
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Anonymous Route',
+      title: 'Named Route Example',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChangeNotifierProvider<Counter>(
-        create: (context) => Counter(),
-        child: const MyHomePage(),
-      ),
+      routes: {
+        '/': (context) => ChangeNotifierProvider.value(
+              value: _counter,
+              child: MyHomePage(),
+            ),
+        '/counter': (context) => ChangeNotifierProvider.value(
+              value: _counter,
+              child: ShowMeCounter(),
+            )
+      },
     );
+  }
+
+  @override
+  void dispose() {
+    _counter.dispose();
+    super.dispose();
   }
 }
 
@@ -33,7 +52,7 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Anonymous Route'),
+        title: Text('Named Route Example'),
       ),
       body: Center(
         child: Column(
@@ -45,17 +64,7 @@ class MyHomePage extends StatelessWidget {
                 style: TextStyle(fontSize: 20.0),
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) {
-                      return ChangeNotifierProvider.value(
-                        value: context.read<Counter>(),
-                        child: ShowMeCounter(),
-                      );
-                    },
-                  ),
-                );
+                Navigator.pushNamed(context, '/counter');
               },
             ),
             SizedBox(
