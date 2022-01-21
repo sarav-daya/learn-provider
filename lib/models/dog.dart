@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 
-class Dog extends ChangeNotifier {
+class Dog with ChangeNotifier {
   final String name;
   final String breed;
   int age;
