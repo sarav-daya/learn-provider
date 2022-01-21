@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'models/dog.dart';
+import 'package:provider_tutorials/models/counter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,16 +11,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Dog>(
-      create: (context) => Dog(name: 'dog10', breed: 'breed10', age: 3),
-      child: MaterialApp(
-        title: 'Provider 10',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: const MyHomePage(),
+    return MaterialApp(
+      title: 'Provider 11',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
+      home: const MyHomePage(),
     );
   }
 }
@@ -38,89 +34,36 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Provider 10'),
+        title: Text('Provider 11'),
       ),
-      body: Selector<Dog, String>(
-        selector: (BuildContext context, Dog dog) => dog.name,
-        builder: (BuildContext context, String name, Widget? child) {
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                child!,
-                SizedBox(height: 10.0),
-                Text(
-                  '- name: $name',
-                  style: TextStyle(fontSize: 20.0),
-                ),
-                SizedBox(height: 10.0),
-                BreedAndAge(),
-              ],
-            ),
-          );
-        },
-        child: Text(
-          'I like dogs very much',
-          style: TextStyle(fontSize: 20.0),
+      body: Center(
+        child: ChangeNotifierProvider<Counter>(
+          create: (context) => Counter(),
+          child: Builder(
+            builder: (context) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'counter ${context.watch<Counter>().counter}',
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                  ElevatedButton(
+                    onPressed: context.read<Counter>().increment,
+                    child: Text(
+                      'Increment',
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                  )
+                ],
+              );
+            },
+          ),
         ),
       ),
-    );
-  }
-}
-
-class BreedAndAge extends StatelessWidget {
-  const BreedAndAge({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Selector<Dog, String>(
-      selector: (BuildContext context, Dog dog) => dog.breed,
-      builder: (_, String breed, __) {
-        return Column(
-          children: [
-            Text(
-              '- breed: $breed',
-              style: TextStyle(fontSize: 20.0),
-            ),
-            SizedBox(height: 10.0),
-            Age(),
-          ],
-        );
-      },
-    );
-  }
-}
-
-class Age extends StatelessWidget {
-  const Age({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Selector<Dog, int>(
-      selector: (BuildContext context, Dog dog) => dog.age,
-      builder: (_, int age, __) {
-        return Column(
-          children: [
-            Text(
-              '- age: $age',
-              style: TextStyle(fontSize: 20.0),
-            ),
-            SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () => context.read<Dog>().grow(),
-              child: Text(
-                'Grow',
-                style: TextStyle(fontSize: 20.0),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }
