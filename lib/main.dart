@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider_tutorials/pages/Proxyprov_update.dart';
+import 'package:provider_tutorials/pages/proxyprov_create_update.dart';
 import 'package:provider_tutorials/pages/why_proxyprovider.dart';
 
 void main() {
@@ -64,7 +65,12 @@ class HomePage extends StatelessWidget {
               ),
               SizedBox(height: 10.0),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ProxyProvCreateUpdate()));
+                },
                 child: Text(
                   'ProxyProvider\ncreate/update',
                   style: TextStyle(fontSize: 20.0),
