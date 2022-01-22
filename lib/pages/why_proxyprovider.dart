@@ -30,6 +30,7 @@ class _WhyProxyProvState extends State<WhyProxyProv> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Why ProxyProvider'),
+        elevation: 0.0,
       ),
       body: Center(
         child: Provider<Translations>(

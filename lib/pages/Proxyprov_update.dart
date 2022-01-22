@@ -30,6 +30,7 @@ class _ProxyProvUpdate extends State<ProxyProvUpdate> {
     return Scaffold(
       appBar: AppBar(
         title: Text('ProxyProvider Update'),
+        elevation: 0.0,
       ),
       body: Center(
         child: ProxyProvider0<Translations>(
