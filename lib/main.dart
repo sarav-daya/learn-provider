@@ -25,15 +25,25 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      routes: {
-        '/': (context) => ChangeNotifierProvider.value(
-              value: _counter,
-              child: MyHomePage(),
-            ),
-        '/counter': (context) => ChangeNotifierProvider.value(
-              value: _counter,
-              child: ShowMeCounter(),
-            )
+      onGenerateRoute: (RouteSettings settings) {
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(
+              builder: (context) => ChangeNotifierProvider.value(
+                value: _counter,
+                child: MyHomePage(),
+              ),
+            );
+          case '/counter':
+            return MaterialPageRoute(
+              builder: (context) => ChangeNotifierProvider.value(
+                value: _counter,
+                child: ShowMeCounter(),
+              ),
+            );
+          default:
+            return null;
+        }
       },
     );
   }
