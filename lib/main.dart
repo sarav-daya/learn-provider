@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider_tutorials/pages/Proxyprov_update.dart';
 import 'package:provider_tutorials/pages/chngnotiprov_chgnotiproxyprov.dart';
+import 'package:provider_tutorials/pages/chngnotiprov_proxyprov.dart';
 import 'package:provider_tutorials/pages/proxyprov_create_update.dart';
 import 'package:provider_tutorials/pages/proxyprov_proxyprov.dart';
 import 'package:provider_tutorials/pages/why_proxyprovider.dart';
@@ -127,7 +128,14 @@ class HomePage extends StatelessWidget {
               ),
               SizedBox(height: 10.0),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChgNotProvProxyProv(),
+                    ),
+                  );
+                },
                 child: Text(
                   'ChangeNotifierProvider\nProxyProvider',
                   style: TextStyle(fontSize: 15.0),

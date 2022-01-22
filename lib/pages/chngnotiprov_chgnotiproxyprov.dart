@@ -64,7 +64,7 @@ class ShowTranslations extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      context.read<Translations>().title,
+      context.watch<Translations>().title,
       style: TextStyle(fontSize: 28.0),
     );
   }
