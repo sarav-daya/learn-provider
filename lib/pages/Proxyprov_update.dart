@@ -29,7 +29,7 @@ class _ProxyProvUpdate extends State<ProxyProvUpdate> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Why ProxyProvider'),
+        title: Text('ProxyProvider Update'),
       ),
       body: Center(
         child: ProxyProvider0<Translations>(
