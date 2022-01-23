@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
 
     form.save();
 
-    context.read<AppProvider>().getResult(searchTerm!);
+    context.read<AppProvider>().getResult(context, searchTerm!);
     // Navigator.push(
     //   context,
     //   MaterialPageRoute(
@@ -73,29 +73,29 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppProvider>().state;
-    if (appState == AppState.success) {
-      WidgetsBinding.instance!.addPostFrameCallback(
-        (timeStamp) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SuccessPage(),
-            ),
-          );
-        },
-      );
-    } else if (appState == AppState.error) {
-      WidgetsBinding.instance!.addPostFrameCallback(
-        (timeStamp) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              content: Text('Something went wrong.'),
-            ),
-          );
-        },
-      );
-    }
+    // if (appState == AppState.success) {
+    //   WidgetsBinding.instance!.addPostFrameCallback(
+    //     (timeStamp) {
+    //       Navigator.push(
+    //         context,
+    //         MaterialPageRoute(
+    //           builder: (context) => SuccessPage(),
+    //         ),
+    //       );
+    //     },
+    //   );
+    // } else if (appState == AppState.error) {
+    //   WidgetsBinding.instance!.addPostFrameCallback(
+    //     (timeStamp) {
+    //       showDialog(
+    //         context: context,
+    //         builder: (context) => AlertDialog(
+    //           content: Text('Something went wrong.'),
+    //         ),
+    //       );
+    //     },
+    //   );
+    // }
     return Scaffold(
       appBar: AppBar(
         title: Text('Search'),
