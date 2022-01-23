@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/src/provider.dart';
+import 'package:provider_tutorials/pages/handle_dialog_page.dart';
 import 'package:provider_tutorials/providers/counter.dart';
 
 class NavigatePage extends StatefulWidget {
@@ -10,9 +11,20 @@ class NavigatePage extends StatefulWidget {
 }
 
 class _NavigatePageState extends State<NavigatePage> {
-  int myCounter = 0;
   @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (timestamp) {
+        if (context.read<Counter>().counter == 3) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OtherPage(),
+            ),
+          );
+        }
+      },
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text('Navigate'),
@@ -20,7 +32,7 @@ class _NavigatePageState extends State<NavigatePage> {
       ),
       body: Center(
         child: Text(
-          'counter: ${context.watch<Counter>().counter}\nMyCounter: $myCounter',
+          'counter: ${context.watch<Counter>().counter}',
           style: TextStyle(fontSize: 40.0),
         ),
       ),
