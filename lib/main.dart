@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -55,34 +54,58 @@ class _HomePageState extends State<HomePage> {
 
     form.save();
 
-    try {
-      await context.read<AppProvider>().getResult(searchTerm!);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SuccessPage(),
-        ),
-      );
-    } catch (e) {
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Text('Something went wrong.'),
-        ),
-      );
-    }
+    context.read<AppProvider>().getResult(searchTerm!);
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder: (context) => SuccessPage(),
+    //   ),
+    // );
+
+    // showDialog(
+    //   context: context,
+    //   builder: (context) => AlertDialog(
+    //     content: Text('Something went wrong.'),
+    //   ),
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppProvider>().state;
+    if (appState == AppState.success) {
+      WidgetsBinding.instance!.addPostFrameCallback(
+        (timeStamp) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SuccessPage(),
+            ),
+          );
+        },
+      );
+    } else if (appState == AppState.error) {
+      WidgetsBinding.instance!.addPostFrameCallback(
+        (timeStamp) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              content: Text('Something went wrong.'),
+            ),
+          );
+        },
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text('Search'),
         elevation: 0.0,
       ),
-      body: Scaffold(
-        body: Center(
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Center(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 30),
             child: Form(
