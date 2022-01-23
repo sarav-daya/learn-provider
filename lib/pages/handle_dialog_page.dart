@@ -10,17 +10,55 @@ class HandleDialogPage extends StatefulWidget {
 }
 
 class _HandleDialogState extends State<HandleDialogPage> {
-  int myCounter = 0;
+  @override
+  void initState() {
+    super.initState();
+    // WidgetsBinding.instance!.addPostFrameCallback(
+    //   (timeStamp) {
+    //     showDialog(
+    //       context: context,
+    //       builder: (context) => AlertDialog(
+    //         content: Text('Be careful!!'),
+    //       ),
+    //     );
+    //   },
+    // );
+  }
+
   @override
   Widget build(BuildContext context) {
+    // WidgetsBinding.instance!.addPostFrameCallback(
+    //   (timestamp) {
+    //     if (context.read<Counter>().counter == 3) {
+    //       showDialog(
+    //         context: context,
+    //         builder: (context) => AlertDialog(
+    //           content: Text('Be careful!!'),
+    //         ),
+    //       );
+    //     }
+    //   },
+    // );
+
+    Future.delayed(Duration(seconds: 0), () {
+      if (context.read<Counter>().counter == 3) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            content: Text('Be careful!!'),
+          ),
+        );
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dialog'),
+        title: Text('Handle Dialog'),
         elevation: 0.0,
       ),
       body: Center(
         child: Text(
-          'counter: ${context.watch<Counter>().counter}\nMyCounter: $myCounter',
+          'counter: ${context.watch<Counter>().counter}',
           style: TextStyle(fontSize: 40.0),
         ),
       ),
