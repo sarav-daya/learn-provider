@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:provider_tutorials/app_provider.dart';
+import 'package:provider_tutorials/success_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -43,10 +45,37 @@ class _HomePageState extends State<HomePage> {
 
   String? searchTerm;
 
-  void submit() {}
+  void submit() async {
+    setState(() {
+      autovalidateMode = AutovalidateMode.always;
+    });
+
+    final form = formKey.currentState;
+    if (form == null || !form.validate()) return;
+
+    form.save();
+
+    try {
+      await context.read<AppProvider>().getResult(searchTerm!);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SuccessPage(),
+        ),
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text('Something went wrong.'),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<AppProvider>().state;
     return Scaffold(
       appBar: AppBar(
         title: Text('Search'),
@@ -82,13 +111,18 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 20,
                   ),
-                  ElevatedButton(
-                    onPressed: submit,
-                    child: Text(
-                      'Get Result',
-                      style: TextStyle(fontSize: 24.0),
-                    ),
-                  )
+                  appState == AppState.loading
+                      ? Center(child: CircularProgressIndicator())
+                      : ElevatedButton(
+                          onPressed:
+                              appState == AppState.loading ? null : submit,
+                          child: Text(
+                            appState == AppState.loading
+                                ? 'Loading'
+                                : 'Get Result',
+                            style: TextStyle(fontSize: 24.0),
+                          ),
+                        )
                 ],
               ),
             ),
