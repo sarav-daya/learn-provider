@@ -41,8 +41,39 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
-
+  late final AppProvider appProv;
   String? searchTerm;
+
+  @override
+  void initState() {
+    super.initState();
+    appProv = context.read<AppProvider>();
+    appProv.addListener(appListener);
+  }
+
+  void appListener() {
+    if (appProv.state == AppState.success) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SuccessPage(),
+        ),
+      );
+    } else if (appProv.state == AppState.error) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Text('Something went wrong.'),
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    appProv.removeListener(appListener);
+    super.dispose();
+  }
 
   void submit() async {
     setState(() {
@@ -51,51 +82,14 @@ class _HomePageState extends State<HomePage> {
 
     final form = formKey.currentState;
     if (form == null || !form.validate()) return;
-
     form.save();
 
-    context.read<AppProvider>().getResult(context, searchTerm!);
-    // Navigator.push(
-    //   context,
-    //   MaterialPageRoute(
-    //     builder: (context) => SuccessPage(),
-    //   ),
-    // );
-
-    // showDialog(
-    //   context: context,
-    //   builder: (context) => AlertDialog(
-    //     content: Text('Something went wrong.'),
-    //   ),
-    // );
+    context.read<AppProvider>().getResult(searchTerm!);
   }
 
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<AppProvider>().state;
-    // if (appState == AppState.success) {
-    //   WidgetsBinding.instance!.addPostFrameCallback(
-    //     (timeStamp) {
-    //       Navigator.push(
-    //         context,
-    //         MaterialPageRoute(
-    //           builder: (context) => SuccessPage(),
-    //         ),
-    //       );
-    //     },
-    //   );
-    // } else if (appState == AppState.error) {
-    //   WidgetsBinding.instance!.addPostFrameCallback(
-    //     (timeStamp) {
-    //       showDialog(
-    //         context: context,
-    //         builder: (context) => AlertDialog(
-    //           content: Text('Something went wrong.'),
-    //         ),
-    //       );
-    //     },
-    //   );
-    // }
     return Scaffold(
       appBar: AppBar(
         title: Text('Search'),

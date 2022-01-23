@@ -13,7 +13,7 @@ class SuccessPage extends StatelessWidget {
       body: Center(
         child: Text(
           'Success',
-          style: TextStyle(fontSize: 48.0),
+          style: TextStyle(fontSize: 48.0, color: Colors.green),
         ),
       ),
     );
